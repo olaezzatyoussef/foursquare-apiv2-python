@@ -12,7 +12,10 @@ http://developer.foursquare.com/docs/
 """
 
 import urllib
-import httplib2
+try:
+    import httplib2
+except ImportError:
+    from google.appengine.api import urlfetch
 import simplejson
 
 VERSION = '0.7'
@@ -42,7 +45,7 @@ class FoursquareAuthHelper(object):
             'redirect_uri': self._oauth_callback_uri
         }
         query_str = self.urlencode(query)
-        return self._authentication_url + "?" + query_str 
+        return self._authentication_url + "?" + query_str
 
     def get_access_token_url(self, code):
         query = {
@@ -100,9 +103,12 @@ class FoursquareClient(object):
             else:
                 url = url + '&' + query_str
                     
-        h = httplib2.Http()
         print url
-        resp, content = h.request(url, method, body=body_str)
+        try:
+	         h = httplib2.Http()
+	         resp, content = h.request(url, method, body=body_str)
+        except NameError:
+            content = urlfetch.fetch(url = url, method = method, payload = body_str).content
         json = simplejson.loads(content)
         return json
         
@@ -179,8 +185,8 @@ class FoursquareClient(object):
     
     def users_setpings(self, user_id, value=False):
         """ NOTE: Documentation says that value parameter should be sent as
-            POST var but it only works if you send it as query string
-        """
+POST var but it only works if you send it as query string
+"""
         url = self.API_URL + '/users/%s/setpings' % user_id
         query = {
             'value': value
@@ -380,4 +386,3 @@ class FoursquareClient(object):
             'value': value
         }
         return self.make_api_call(url, method='POST', query=query)
-
