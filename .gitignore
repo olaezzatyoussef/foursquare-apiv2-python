@@ -1,0 +1,11 @@
+*.pyc
+*.egg-info
+*.orig
+*.old
+.*.swp
+.*~
+.project
+.pydevproject
+.settings
+*.komodoproject
+.komodotools
