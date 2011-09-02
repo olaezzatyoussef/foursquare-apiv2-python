@@ -58,13 +58,6 @@ class FoursquareAuthHelper(object):
         query_str = self.urlencode(query)
         return self._access_token_url + "?" + query_str
                 
-    def save_token(self, filename='token.txt'):
-        f = open(filename, 'w')
-        f.write()
-        
-    def get_saved_token(self):
-        pass
-    
     def urlencode(self, query):
         return urllib.urlencode(query)
     
@@ -105,8 +98,8 @@ class FoursquareClient(object):
                     
         print url
         try:
-	         h = httplib2.Http()
-	         resp, content = h.request(url, method, body=body_str)
+            h = httplib2.Http()
+            resp, content = h.request(url, method, body=body_str)
         except NameError:
             content = urlfetch.fetch(url = url, method = method, payload = body_str).content
         json = simplejson.loads(content)
@@ -185,8 +178,8 @@ class FoursquareClient(object):
     
     def users_setpings(self, user_id, value=False):
         """ NOTE: Documentation says that value parameter should be sent as
-POST var but it only works if you send it as query string
-"""
+        POST var but it only works if you send it as query string
+        """
         url = self.API_URL + '/users/%s/setpings' % user_id
         query = {
             'value': value
