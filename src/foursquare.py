@@ -158,6 +158,11 @@ class FoursquareClient(object):
     def users_venuehistory(self, user_id='self'):
         url = self.API_URL + '/users/%s/venuehistory' % user_id
         return self.make_api_call(url, method='GET')
+    
+    def users_lists(self, user_id='self', ll='40.7,-74'):
+        url = self.API_URL + '/users/%s/lists' % user_id
+        query = {'ll': ll}
+        return self.make_api_call(url, method='GET', query=query)
     #---------- POST -----------------------
     
     def users_request(self, user_id):
@@ -352,6 +357,24 @@ class FoursquareClient(object):
         url = self.API_URL + '/photos/%s' % photo_id
         return self.make_api_call(url, method='GET')
     # TODO: Not implemented
+    
+     # LISTS
+    def list_detail(self, list_id):
+        url = self.API_URL + '/lists/%s' %list_id
+        return self.make_api_call(url, method='GET')
+    
+    def list_add(self, name, description=None, collaborative=True, photo_id=None):
+        url = self.API_URL + '/lists/add'
+        query = {
+            'name': name,
+            'description': description,
+            'collaborative': collaborative,
+            'photoId': photo_id
+        }
+        return self.make_api_call(url, method='POST', query=query)
+
+#TODO: add the rest of the lists endpoints
+    
     def photos_add(self, photo_path, checkin_id=None, tip_id=None
                    , venue_id=None, broadcast=None
                    , ll=None, ll_acc=None
