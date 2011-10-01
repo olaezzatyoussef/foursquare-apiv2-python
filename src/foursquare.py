@@ -12,10 +12,7 @@ http://developer.foursquare.com/docs/
 """
 
 import urllib
-try:
-    import httplib2
-except ImportError:
-    from google.appengine.api import urlfetch
+import httplib2
 import simplejson
 
 VERSION = '0.7'
@@ -57,6 +54,16 @@ class FoursquareAuthHelper(object):
         }
         query_str = self.urlencode(query)
         return self._access_token_url + "?" + query_str
+    
+    def get_access_token(self, code):
+        http = httplib2.Http()
+        resp, content = http.request(self.get_access_token_url(code))
+        json = simplejson.loads(content)
+        
+        if 'access_token' in json:
+            return json['access_token']
+        else:
+            return None
                 
     def urlencode(self, query):
         return urllib.urlencode(query)
@@ -96,14 +103,9 @@ class FoursquareClient(object):
             else:
                 url = url + '&' + query_str
                     
-        print url
-        try:
-            h = httplib2.Http()
-            resp, content = h.request(url, method, body=body_str)
-        except NameError:
-            content = urlfetch.fetch(url = url, method = method, payload = body_str).content
-        json = simplejson.loads(content)
-        return json
+        h = httplib2.Http()
+        resp, content = h.request(url, method, body=body_str)
+        return simplejson.loads(content)
         
     # Not tested
     def users(self, user_id='self'):
@@ -358,7 +360,7 @@ class FoursquareClient(object):
         return self.make_api_call(url, method='GET')
     # TODO: Not implemented
     
-     # LISTS
+    # LISTS
     def list_detail(self, list_id):
         url = self.API_URL + '/lists/%s' %list_id
         return self.make_api_call(url, method='GET')
