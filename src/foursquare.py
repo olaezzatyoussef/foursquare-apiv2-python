@@ -111,6 +111,14 @@ class FoursquareClient(object):
     def users(self, user_id='self'):
         url = self.API_URL + '/users/%s' % user_id
         return self.make_api_call(url, method='GET')
+    
+    # TODO: Not tested
+    def users_leaderboard(self, neighbors=None):
+        url = self.API_URL + '/users/leaderboard'
+        query = {
+            'neighbors': neighbors
+        }
+        return self.make_api_call(url, method='GET', query=query)
 
     def users_search(self, phone=None, email=None, twitter=None
                      , twitter_source=None, fbid=None, name=None):
@@ -133,19 +141,37 @@ class FoursquareClient(object):
         url = self.API_URL + '/users/%s/badges' % user_id
         return self.make_api_call(url, method='GET')
     
-    def users_checkins(self, user_id='self'):
+    # TODO: Updated and not tested
+    def users_checkins(self, user_id='self', limit=None, offset=None
+                       , afterTimestamp=None, beforeTimestamp=None):
+        
         url = self.API_URL + '/users/%s/checkins' % user_id
-        return self.make_api_call(url, method='GET')
+        query = {
+            'limit': limit,
+            'offset': offset,
+            'afterTimestamp': afterTimestamp,
+            'beforeTimestamp': beforeTimestamp,
+        }
+        return self.make_api_call(url, method='GET', query=query)
     
-    def users_friends(self, user_id='self'):
+    # TODO: Updated and not tested
+    def users_friends(self, user_id='self', limit=None, offset=None):
         url = self.API_URL + '/users/%s/friends' % user_id
-        return self.make_api_call(url, method='GET')
+        query = {
+            'limit': limit,
+            'offset': offset
+        }
+        return self.make_api_call(url, method='GET', query=query)
     
-    def users_tips(self, user_id='self', sort='recent', ll=None):
+    # TODO: Updated and not tested
+    def users_tips(self, user_id='self', sort='recent', ll=None
+                   , limit=None, offset=None):
         url = self.API_URL + '/users/%s/tips' % user_id
         query = {
             'sort': sort,
-            'll': ll
+            'll': ll,
+            'limit': limit,
+            'offset': offset,
         }
         return self.make_api_call(url, method='GET', query=query)
     
@@ -157,14 +183,32 @@ class FoursquareClient(object):
         }
         return self.make_api_call(url, method='GET', query=query)
     
-    def users_venuehistory(self, user_id='self'):
+    # TODO: Updated and not tested
+    def users_venuehistory(self, user_id='self', beforeTimestamp=None
+                           , afterTimestamp=None, categoryId=None):
+        
         url = self.API_URL + '/users/%s/venuehistory' % user_id
+        query = {
+            'beforeTimestamp': beforeTimestamp,
+            'afterTimestamp': afterTimestamp,
+            'categoryId': categoryId
+        }
+        return self.make_api_call(url, method='GET', query=query)
+    
+    # TODO: Updated and not tested
+    def users_lists(self, user_id='self', group=None, ll=None):
+        url = self.API_URL + '/users/%s/lists' % user_id
+        query = {
+            'group': group,
+            'll': ll
+        }
+        return self.make_api_call(url, method='GET', query=query)
+    
+    # Not tested
+    def users_mayorships(self, user_id='self'):
+        url = self.API_URL + '/users/%s/mayorships' % user_id
         return self.make_api_call(url, method='GET')
     
-    def users_lists(self, user_id='self', ll='40.7,-74'):
-        url = self.API_URL + '/users/%s/lists' % user_id
-        query = {'ll': ll}
-        return self.make_api_call(url, method='GET', query=query)
     #---------- POST -----------------------
     
     def users_request(self, user_id):
