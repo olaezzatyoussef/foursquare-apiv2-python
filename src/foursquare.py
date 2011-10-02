@@ -240,10 +240,12 @@ class FoursquareClient(object):
     def venues(self, venue_id):
         url = self.API_URL + '/venues/%s' % venue_id
         return self.make_api_call(url, method='GET')
-    # TODO: not tested
+    
+    # TODO: updated and not tested
     def venues_add(self, name, address=None, cross_street=None, city=None
-                   , state=None, zip=None, phone=None
-                   , ll=None, primary_category_id=None):
+                   , state=None, zip=None, phone=None, twitter=None
+                   , ll=None, primary_category_id=None
+                   , description=None, url=None):
         url = self.API_URL + '/venues/add'
         body = {
             'name': name,
@@ -253,17 +255,41 @@ class FoursquareClient(object):
             'state': state,
             'zip': zip,
             'phone': phone,
+            'twitter': twitter,
             'll': ll,
-            'primaryCategoryId': primary_category_id
+            'primaryCategoryId': primary_category_id,
+            'description': description,
+            'url': url
         }
         return self.make_api_call(url, method='POST', body=body)
     
     def venues_categories(self):
         url = self.API_URL + '/venues/categories'
         return self.make_api_call(url, method='GET')
+    
+    # TODO: New and not tested
+    def venues_explore(self, ll=None, llAcc=None, alt=None, altAcc=None
+                      , radius=None, section=None, query=None, limit=None
+                      , intent=None, novelty=None):
+        url = self.API_URL + '/venues/explore'
+        query = {
+            'll': ll,
+            'llAcc': llAcc,
+            'alt': alt,
+            'altAcc': altAcc,
+            'radius': radius,
+            'section': section,
+            'query': query,
+            'limit': limit,
+            'intent': intent,
+            'novelty': novelty
+        }
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
 
+    # TODO: updated and not tested
     def venues_search(self, ll=None, ll_acc=None, alt=None, alt_acc=None
-                      , query=None, limit=None, intent=None):
+                      , query=None, limit=None, intent=None, categoryId=None
+                      , url=None, providerId=None, linkedId=None):
         url = self.API_URL + '/venues/search'
         query = {
             'll': ll,
@@ -272,17 +298,72 @@ class FoursquareClient(object):
             'altAcc': alt_acc,
             'query': query,
             'limit': limit,
-            'intent': intent
+            'intent': intent,
+            'categoryId': categoryId,
+            'url': url,
+            'providerId': providerId,
+            'linkedId': linkedId
+        }
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
+    
+    # TODO: New and not tested
+    def venues_trending(self, ll=None, limit=None, radius=None):
+        url = self.API_URL + '/venues/trending'
+        query = {
+            'll': ll,
+            'radius': radius,
+            'limit': limit
+        }
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
+    
+    # TODO: Updated and not tested
+    def venues_herenow(self, venue_id, limit=None, offset=None
+                       , afterTimestamp=None):
+        url = self.API_URL + '/venues/%s/herenow' % venue_id
+        query = {
+            'limit': limit,
+            'offset': offset,
+            'afterTimestamp': afterTimestamp
+        }
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
+    
+    # TODO: Updated and not tested
+    def venues_tips(self, venue_id, sort='recent', limit=None, offset=None):
+        url = self.API_URL + '/venues/%s/tips' % venue_id
+        query = {
+            'sort': sort,
+            'limit': limit,
+            'offset': offset
+        }
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
+    
+    # TODO: new and not tested
+    def venues_photos(self, venue_id, group='multi', limit=None, offset=None):
+        url = self.API_URL + '/venues/%s/photos' % venue_id
+        query = {
+            'group': group,
+            'limit': limit,
+            'offset': offset
+        }
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
+    
+    # TODO: new and not tested
+    def venues_links(self, venue_id, group='multi', limit=None, offset=None):
+        url = self.API_URL + '/venues/%s/links' % venue_id
+        return self.make_api_call(url, method='GET', add_token=False)
+    
+    # TODO: new and not tested
+    def venues_listed(self, venue_id, group=None):
+        url = self.API_URL + '/venues/%s/listed' % venue_id
+        query = {
+            'group': group,
         }
         return self.make_api_call(url, method='GET', query=query)
     
-    def venues_herenow(self, venue_id):
-        url = self.API_URL + '/venues/%s/herenow' % venue_id
-        return self.make_api_call(url, method='GET')
-    
-    def venues_tips(self, venue_id, sort='recent'):
-        url = self.API_URL + '/venues/%s/tips' % venue_id
-        return self.make_api_call(url, method='GET')
+    # TODO: new and not tested
+    def venues_events(self, venue_id, group='multi', limit=None, offset=None):
+        url = self.API_URL + '/venues/%s/events' % venue_id
+        return self.make_api_call(url, method='GET', add_token=False)
 
     def venues_marktodo(self, venue_id, text=''):
         url = self.API_URL + '/venues/%s/marktodo' % venue_id
@@ -291,13 +372,38 @@ class FoursquareClient(object):
         }
         return self.make_api_call(url, method='POST', body=body)
 
-    def venues_flag(self, venue_id, problem):
+    def venues_flag(self, venue_id, problem, duplicated_venue_id=None):
         problem_set = ['mislocated', 'closed', 'duplicated']
         url = self.API_URL + '/venues/%s/flag' % venue_id
         query = {
-            'problem': problem
+            'problem': problem,
+            'venueId': duplicated_venue_id
         }
         return self.make_api_call(url, method='POST', query=query)
+    
+    # TODO: New and not tested
+    def venues_edit(self, venue_id, name, address=None
+                   , cross_street=None, city=None
+                   , state=None, zip=None, phone=None
+                   , ll=None, primary_category_id=None
+                   , twitter=None, description=None, url=None):
+        url = self.API_URL + '/venues/%s/edit' % venue_id
+        body = {
+            'name': name,
+            'address': address,
+            'crossStreet': cross_street,
+            'city': city,
+            'state': state,
+            'zip': zip,
+            'phone': phone,
+            'll': ll,
+            'primaryCategoryId': primary_category_id,
+            'twitter': twitter,
+            'description': description,
+            'url': url
+        }
+        return self.make_api_call(url, method='POST', body=body)
+
     # TODO: not tested
     def venues_proposeedit(self, venue_id, name, address=None
                    , cross_street=None, city=None
@@ -317,9 +423,13 @@ class FoursquareClient(object):
         }
         return self.make_api_call(url, method='POST', body=body)
     
-    def checkins(self, checkin_id):
+    # TODO: updated and not tested
+    def checkins(self, checkin_id, signature=None):
         url = self.API_URL + '/checkins/%s' % checkin_id
-        return self.make_api_call(url, method='GET')
+        query = {
+            'signature': signature
+        }
+        return self.make_api_call(url, method='GET', query=query)
     
     def checkins_add(self, venue_id=None, venue=None, shout=None
                      , broadcast='public', ll=None, ll_acc=None
@@ -337,13 +447,11 @@ class FoursquareClient(object):
         }
         return self.make_api_call(url, method='POST', query=body)
     
-    def checkins_recent(self, ll=None, limit=None, offset=None
-                        , after_timestamp=None):
+    def checkins_recent(self, ll=None, limit=None, after_timestamp=None):
         url = self.API_URL + '/checkins/recent'
         query = {
             'll': ll,
             'limit': limit,
-            'offset': offset,
             'afterTimestamp': after_timestamp
         }
         return self.make_api_call(url, method='GET', query=query)
