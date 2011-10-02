@@ -523,11 +523,12 @@ class FoursquareClient(object):
     # TODO: Not implemented
     
     # LISTS
-    def list_detail(self, list_id):
-        url = self.API_URL + '/lists/%s' %list_id
-        return self.make_api_call(url, method='GET')
+    # TODO: Test
+    def lists(self, list_id):
+        url = self.API_URL + '/lists/%s' % list_id
+        return self.make_api_call(url, method='GET', add_token=False)
     
-    def list_add(self, name, description=None, collaborative=True, photo_id=None):
+    def lists_add(self, name, description=None, collaborative=True, photo_id=None):
         url = self.API_URL + '/lists/add'
         query = {
             'name': name,
@@ -536,6 +537,108 @@ class FoursquareClient(object):
             'photoId': photo_id
         }
         return self.make_api_call(url, method='POST', query=query)
+    
+    # TODO: test
+    def lists_followers(self, list_id):
+        url = self.API_URL + '/lists/%s/followers' % list_id
+        return self.make_api_call(url, method='GET')
+    
+    # TODO: test
+    def lists_suggestvenues(self, list_id):
+        url = self.API_URL + '/lists/%s/suggestvenues' % list_id
+        return self.make_api_call(url, method='GET')
+    
+    # TODO: test
+    def lists_suggestphoto(self, list_id, item_id):
+        url = self.API_URL + '/lists/%s/suggestphoto' % list_id
+        query = {
+            'itemId': item_id
+        }
+        return self.make_api_call(url, method='GET', query=query)
+    
+    # TODO: test
+    def lists_suggesttip(self, list_id, item_id):
+        url = self.API_URL + '/lists/%s/suggesttip' % list_id
+        query = {
+            'itemId': item_id
+        }
+        return self.make_api_call(url, method='GET', query=query)
+    
+    # TODO: test | Something weird is going on, it doesn't ask for list to edit
+    def lists_edit(self, name, description=None, collaborative=True, photo_id=None):
+        url = self.API_URL + '/lists/edit' 
+        query = {
+            'name': name,
+            'description': description,
+            'collaborative': collaborative,
+            'photoId': photo_id
+        }
+        return self.make_api_call(url, method='POST', query=query)
+    
+    # TODO: test
+    def lists_follow(self, list_id):
+        url = self.API_URL + '/lists/%s/follow' % list_id
+        return self.make_api_call(url, method='GET')
+    
+    # TODO: test
+    def lists_unfollow(self, list_id):
+        url = self.API_URL + '/lists/%s/unfollow' % list_id
+        return self.make_api_call(url, method='GET')
+    
+    # TODO: Test
+    def lists_additem(self, list_id, venueId=None, text=None, url=None
+                      , tipId=None, listId=None, itemId=None):
+        url = self.API_URL + '/lists/%s/additem' % list_id
+        query = {
+            'venueId': venueId,
+            'text': text,
+            'url': url,
+            'tipId': tipId,
+            'listId': listId,
+            'itemId': itemId
+        }
+        return self.make_api_call(url, method='POST', query=query)
+    
+    # TODO: test
+    def lists_deleteitem(self, list_id, item_id):
+        url = self.API_URL + '/lists/%s/deleteitem' % list_id
+        query = {
+            'itemId': item_id
+        }
+        return self.make_api_call(url, method='POST', query=query)
+    
+    # TODO: test
+    def lists_moveitem(self, list_id, item_id, beforeId=None, afterId=None):
+        url = self.API_URL + '/lists/%s/moveitem' % list_id
+        query = {
+            'itemId': item_id,
+            'beforeId': beforeId,
+            'afterId': afterId
+        }
+        return self.make_api_call(url, method='POST', query=query)
+    
+    # TODO: Test
+    def lists_updateitem(self, list_id, item_id, tipId=None, text=None
+                         , url=None, photoId=None):
+        url = self.API_URL + '/lists/%s/updateitem' % list_id
+        query = {
+            'itemId': item_id,
+            'tipId': tipId,
+            'text': text,
+            'url': url,
+            'photoId': photoId
+        }
+        return self.make_api_call(url, method='POST', query=query)
+    
+    # TODO: Test
+    def lists_share(self, list_id, broadcast=None, message=None):
+        url = self.API_URL + '/lists/%s/share' % list_id
+        query = {
+            'broadcast': broadcast,
+            'message': message
+        }
+        return self.make_api_call(url, method='POST', query=query)
+
 
 #TODO: add the rest of the lists endpoints
     
