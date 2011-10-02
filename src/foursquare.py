@@ -495,7 +495,7 @@ class FoursquareClient(object):
             'filter': filter,
             'query': query
         }
-        return self.make_api_call(url, method='GET', query=query)
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
 
     def tips_marktodo(self, tip_id):
         url = self.API_URL + '/tips/%s/marktodo' % tip_id
