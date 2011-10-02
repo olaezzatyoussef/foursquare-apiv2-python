@@ -474,13 +474,15 @@ class FoursquareClient(object):
     def tips(self, tip_id):
         url = self.API_URL + '/tips/%s' % tip_id
         return self.make_api_call(url, method='GET')
+    
     # TODO Not tested
-    def tips_add(self, venue_id, text, url=None):
+    def tips_add(self, venue_id, text, url=None, broadcast=None):
         url = self.API_URL + '/tips/add'
         query = {
             'venueId': venue_id,
             'text': text,
-            'url': url
+            'url': url,
+            'broadcast': broadcast
         }
         return self.make_api_call(url, method='POST', query=query)
     
@@ -492,6 +494,14 @@ class FoursquareClient(object):
             'offset': offset,
             'filter': filter,
             'query': query
+        }
+        return self.make_api_call(url, method='GET', query=query, add_token=False)
+    
+    # TODO: New and not tested
+    def tips_listed(self, tip_id, group=None):
+        url = self.API_URL + '/tips/%s/listed' % tip_id
+        query = {
+            'group': group
         }
         return self.make_api_call(url, method='GET', query=query)
 
